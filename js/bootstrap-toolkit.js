@@ -33,7 +33,7 @@
         /**
          * Returns true if current breakpoint matches passed alias
          */
-        is: function( alias ) {
+        isVisible: function( alias ) {
             return self.breakpoints[alias].is(':visible');
         },
 
@@ -43,7 +43,7 @@
         current: function(){
             var name = 'unrecognized';
             $.each(self.breakpoints, function(alias){
-                if (self.is(alias)) {
+                if (self.isVisible(alias)) {
                     name = alias;
                 }
             });
@@ -64,13 +64,13 @@
                 }
                 // Use default interval if none specified
                 if (typeof ms === "undefined") {
-                    var ms = self.interval;
+                    ms = self.interval;
                 }
                 timers[uID] = setTimeout(callback, ms);
             };
         }()
 
-    }
+    };
 
     return self;
 
