@@ -7,17 +7,15 @@ The SASS module enables quick and simple styling for elements needing different 
 
 Current version: 2.3.0
 
-[See a live example on CodePen](http://codepen.io/dih/full/ivECj)
-
 ### JavaScript
 #### Determine which breakpoint is active
 
 ````javascript
-if (viewport.is('xs')) {
+if (window.viewport.is('xs')) {
   // do stuff in the lowest resolutions only!
 }
 
-if (viewport.is('lg')) {
+if (window.viewport.is('lg')) {
   // do stuff on huge screens only
 }
 ````
@@ -27,7 +25,7 @@ if (viewport.is('lg')) {
 
 ````javascript
 $(window).bind('resize', function() {
-    viewport.changed(function() {
+    window.viewport.changed(function() {
 
       // do some other stuff!
 
@@ -39,7 +37,7 @@ $(window).bind('resize', function() {
 
 ````javascript
 $(window).bind('resize', function() {
-    viewport.changed(function() {
+    window.viewport.changed(function() {
 
       // do some other stuff!
 
@@ -51,9 +49,9 @@ $(window).bind('resize', function() {
 
 ````javascript
 $(window).bind('resize', function() {
-    viewport.changed(function() {
+    window.viewport.changed(function() {
 
-        console.log( 'Current breakpoint: '+ viewport.current() );
+        console.log( 'Current breakpoint: '+ window.viewport.current() );
 
     })
 });

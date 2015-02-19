@@ -1,86 +1,109 @@
-/*!
- * Responsive Bootstrap Toolkit
- * Author:    Maciej Gurban
- * License:   MIT
- * Version:   2.3.0 (2015-02-15)
- * Origin:    https://github.com/maciej-gurban/responsive-bootstrap-toolkit
- */
-;var ResponsiveBootstrapToolkit = (function($){
-    // Methods and properties
-    var self = {
+function Viewport (options) {
+    if( !this instanceof Viewport ){
+        throw new SyntaxError("Viewport constructor called without 'new' keyword!");
+    }
+    // merge the options in
+    $.extend(this, options);
 
-        /**
-         * Determines default interval between firing 'changed' method
-         */
-        interval: 300,
+    this.init();
+}
 
-        /**
-         * Breakpoint aliases
-         */
-        breakpoints: ['xs', 'sm', 'md', 'lg'],
+Viewport.prototype = {
+    constructor:        Viewport,
 
-        /**
-         * Used to calculate intervals between consecutive function executions
-         */
-        timer: new Date(),
+    /**
+     * Determines default interval between firing 'changed' method
+     */
+    interval: 300,
 
-        init: function() {
-            self.insertHTML();
-            return self;
-        },
+    /**
+     * Flag to determine if HTML insert required
+     */
+    htmlInserted: false,
 
-        insertHTML: function() {
-            $.each(self.breakpoints, function(i, alias){
-                $('<div class="device-'+alias+' visible-'+alias+'"></div>').appendTo('body');
-            });
-        },
+    /**
+     * Breakpoint aliases
+     */
+    breakpoints: ['xs', 'sm', 'md', 'lg'],
 
-        /**
-         * Returns true if current breakpoint matches passed alias
-         */
-        is: function( alias ) {
-            return $('.device-'+alias).css('display') !== 'none';
-        },
+    /**
+     * Used to calculate intervals between consecutive function executions
+     */
+    timer: new Date(),
 
-        /**
-         * Returns current breakpoint alias
-         */
-        current: function(){
-            var name = 'unrecognized';
-            $.each(self.breakpoints, function(i, alias){
-                if (self.is(alias)) {
-                    name = alias;
-                }
-            });
-            return name;
-        },
+    /**
+     * Setup the object
+     */
+    init: function() {
+        this.insertHTML();
+    },
 
-        /*
-         * Waits specified number of milliseconds before executing a function
-         * Source: http://stackoverflow.com/a/4541963/2066118
-         */
-        changed: function() {
-            var timers = {};
-            return function(callback, ms) {
-                // Get unique timer ID
-                var uID = (!uID) ? self.timer.getTime() : null;
-                if (timers[uID]) {
-                    clearTimeout(timers[uID]);
-                }
-                // Use default interval if none specified
-                if (typeof ms === "undefined") {
-                    ms = self.interval;
-                }
-                timers[uID] = setTimeout(callback, ms);
-            };
-        }()
+    /**
+     * Insert HTML into DOM if required
+     */
+    insertHTML: function() {
+        if( this.htmlInserted === true ){
+            return true;
+        }
 
-    };
+        $.each(this.breakpoints, function(i, alias){
+            $("<div class='device-" + alias + " visible-" + alias + "'></div>").appendTo('body');
+        });
 
-    $(function(){
-        self.init();
-    });
+        this.htmlInserted = true;
+    },
 
-    return self;
+    /**
+     * Returns true if current breakpoint matches passed alias
+     */
+    is: function( alias ) {
+        return $('.device-' + alias).css('display') !== 'none';
+    },
 
-})(jQuery);
+    /**
+     * Returns current breakpoint alias
+     */
+    current: function(){
+        var viewport = this;
+        var name = 'unrecognized';
+        $.each(this.breakpoints, function(i, alias){
+            if (viewport.is(alias)) {
+                name = alias;
+            }
+        });
+        return name;
+    },
+
+    /**
+     * Waits specified number of milliseconds before executing a function
+     * Source: http://stackoverflow.com/a/4541963/2066118
+     */
+    changed: function() {
+        var timers = {};
+
+        return function(callback, ms) {
+            // Get unique timer ID
+            var uID = (!uID) ? this.timer.getTime() : null;
+
+            if (timers[uID]) {
+                clearTimeout(timers[uID]);
+            }
+            // Use default interval if none specified
+            if (typeof ms === "undefined") {
+                ms = this.interval;
+            }
+            timers[uID] = setTimeout(callback, ms);
+        };
+    }()
+
+};
+
+
+$(function(){
+
+    /**
+     * Init Global viewport
+     */
+    window.viewport = new Viewport();
+
+});
