@@ -22,7 +22,7 @@ Viewport.prototype = {
     htmlInserted: false,
 
     /**
-     * Breakpoint aliases
+     * Breakpoint aliases (in Order)
      */
     breakpoints: ['xs', 'sm', 'md', 'lg'],
 
@@ -61,12 +61,35 @@ Viewport.prototype = {
     },
 
     /**
+     * Returns breakpoint if greater than or equal to passed alias
+     */
+    gte: function( alias ) {
+        var key = this.breakpoints.indexOf(alias);
+        var newBreakpoints = this.breakpoints.slice(key);
+
+        return this.current(newBreakpoints);
+    },
+
+    /**
+     * Returns breakpoint if lower than or equal to passed alias
+     */
+    lte: function( alias ) {
+        var key = this.breakpoints.indexOf(alias);
+        var newBreakpoints = this.breakpoints.slice(0, key+1);
+
+        return this.current(newBreakpoints);
+    },
+
+    /**
      * Returns current breakpoint alias
      */
-    current: function(){
+    current: function(breakpoints){
         var viewport = this;
-        var name = 'unrecognized';
-        $.each(this.breakpoints, function(i, alias){
+        var name = false;
+        if( typeof breakpoints == "undefined" ){
+            breakpoints = this.breakpoints;
+        }
+        $.each(breakpoints, function(i, alias){
             if (viewport.is(alias)) {
                 name = alias;
             }
