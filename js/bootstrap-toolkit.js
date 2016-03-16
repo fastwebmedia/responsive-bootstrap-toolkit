@@ -1,3 +1,5 @@
+(function($) {
+
 function Viewport (options) {
 	if( !this instanceof Viewport ){
 		throw new SyntaxError("Viewport constructor called without 'new' keyword!");
@@ -131,11 +133,8 @@ Viewport.prototype = {
 };
 
 
-$(function(){
-
-	/**
-	 * Init Global viewport
-	 */
-	window.viewport = new Viewport();
-
+$(document).ready(function(){
+    window.viewport = new Viewport();
 });
+
+})(jQuery); // Fully reference jQuery after this point.
